@@ -278,7 +278,10 @@ void *glMapBufferRange( 	GLenum target,
                            GLsizeiptr length,
                            GLbitfield access) {
     if(never_flush_buffers) access &= ~GL_MAP_FLUSH_EXPLICIT_BIT;
-    return es3_functions.glMapBufferRange(target, offset, length, access);
+    es3_functions.glGetError();
+    void* map = es3_functions.glMapBufferRange(target, offset, length, access);
+    printf("glMapBufferRange=%p-%p error=%x\n", map, ((char*)map)+length, es3_functions.glGetError());
+    return map;
 }
 
 void glFlushMappedBufferRange( 	GLenum target,
